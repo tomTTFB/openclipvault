@@ -6,27 +6,46 @@
     <title>Media Host</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        terminal: {
+                            black: '#000000',
+                            white: '#ffffff',
+                            gray: '#cccccc',
+                        }
+                    },
+                    fontFamily: {
+                        'mono': ['Courier New', 'Courier', 'monospace'],
+                    },
+                    borderRadius: {
+                        'terminal': '0.25rem',
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="bg-terminal-black text-terminal-white font-mono min-h-screen flex flex-col">
     <!-- Navigation Bar -->
-    <nav class="bg-white shadow-md">
-        <div class="container mx-auto px-4 py-3">
+    <nav class="border-b border-terminal-white py-4">
+        <div class="container mx-auto px-4">
             <div class="flex justify-between items-center">
-                <div class="flex items-center">
-                    <h1 class="text-2xl font-bold text-blue-600">MediaHost</h1>
-                </div>
+                <div class="text-2xl font-bold">MediaHost</div>
                 
                 <div class="flex items-center space-x-4">
                     {% if logged_in %}
-                        <span class="text-gray-700">Welcome, {{ session['username'] }}!</span>
+                        <span class="text-terminal-gray">Welcome, {{ session['username'] }}!</span>
                         <a href="{{ url_for('logout') }}"
-                           class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300">
-                            <i class="fas fa-sign-out-alt mr-1"></i>Logout
+                           class="bg-terminal-black text-terminal-white border border-terminal-white px-4 py-2 rounded-terminal font-medium transition duration-300 hover:bg-terminal-gray">
+                            Logout
                         </a>
                     {% else %}
                         <a href="{{ url_for('login') }}"
-                           class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300">
-                            <i class="fas fa-sign-in-alt mr-1"></i>Login
+                           class="bg-terminal-white text-terminal-black px-4 py-2 rounded-terminal font-medium transition duration-300 hover:bg-terminal-gray">
+                            Login
                         </a>
                     {% endif %}
                 </div>
@@ -34,36 +53,36 @@
         </div>
     </nav>
     
-    <div class="container mx-auto px-4 py-8">
+    <div class="container mx-auto px-4 py-8 flex-grow">
         <div class="max-w-4xl mx-auto">
-            <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">Media Host</h1>
+            <h1 class="text-3xl font-bold text-center mb-8">Media Host</h1>
             
             {% if logged_in %}
                 <!-- Upload Form -->
-                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Upload Media</h2>
+                <div class="border border-terminal-white rounded-terminal p-6 mb-8">
+                    <h2 class="text-xl font-semibold mb-4">Upload Media</h2>
                     <form action="/upload" method="post" enctype="multipart/form-data">
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="file">
+                            <label class="block text-terminal-gray text-sm font-bold mb-2" for="file">
                                 Choose file (Images: png, jpg, jpeg, gif | Videos: mp4, mov, webm)
                             </label>
                             <input type="file" name="file" id="file"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                   class="w-full px-3 py-2 bg-terminal-black border border-terminal-white rounded-terminal text-terminal-white focus:outline-none focus:ring-1 focus:ring-terminal-white">
                         </div>
                         <button type="submit"
-                                class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                class="w-full bg-terminal-white text-terminal-black font-bold py-2 px-4 rounded-terminal focus:outline-none">
                             Upload
                         </button>
                     </form>
                 </div>
             {% else %}
-                <div class="bg-white rounded-lg shadow-md p-6 mb-8 text-center">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Please Login to Upload Media</h2>
-                    <p class="text-gray-600 mb-6">You need to be logged in to upload and manage your media files.</p>
-                    <div class="space-x-4">
+                <div class="border border-terminal-white rounded-terminal p-6 mb-8 text-center">
+                    <h2 class="text-xl font-semibold mb-4">Access Required</h2>
+                    <p class="text-terminal-gray mb-6">Please login to upload and manage your media files.</p>
+                    <div>
                         <a href="{{ url_for('login') }}"
-                           class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md font-medium transition duration-300 inline-block">
-                            <i class="fas fa-sign-in-alt mr-2"></i>Login
+                           class="bg-terminal-white text-terminal-black px-6 py-3 rounded-terminal font-medium transition duration-300 inline-block">
+                            Login
                         </a>
                     </div>
                 </div>
@@ -74,7 +93,7 @@
                 {% if messages %}
                     <div class="mb-6">
                         {% for message in messages %}
-                            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                            <div class="border border-green-500 text-green-500 px-4 py-3 rounded-terminal relative" role="alert">
                                 <span class="block sm:inline">{{ message }}</span>
                             </div>
                         {% endfor %}
@@ -83,35 +102,35 @@
             {% endwith %}
             
             <!-- Uploaded Files -->
-            <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="border border-terminal-white rounded-terminal p-6">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-semibold text-gray-800">Uploaded Media</h2>
-                    <span class="text-sm text-gray-500">{{ files|length }} files</span>
+                    <h2 class="text-xl font-semibold">Uploaded Media</h2>
+                    <span class="text-sm text-terminal-gray">{{ files|length }} files</span>
                 </div>
                 
                 {% if files %}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {% for file_id, file_data in files.items() %}
-                            <div class="border border-gray-200 rounded-md p-4 flex flex-col">
+                            <div class="border border-terminal-white rounded-terminal p-4 flex flex-col">
                                 <div class="flex justify-between items-start mb-2">
                                     <div>
-                                        <h3 class="font-medium text-gray-800">{{ file_data.original_name }}</h3>
-                                        <p class="text-xs text-gray-500">ID: {{ file_id }}</p>
-                                        <p class="text-xs text-gray-500">Uploaded by: {{ file_data.uploader }}</p>
+                                        <h3 class="font-medium">{{ file_data.original_name }}</h3>
+                                        <p class="text-xs text-terminal-gray">ID: {{ file_id }}</p>
+                                        <p class="text-xs text-terminal-gray">Uploaded by: {{ file_data.uploader }}</p>
                                     </div>
-                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                    <span class="bg-terminal-white text-terminal-black text-xs font-medium px-2.5 py-0.5 rounded-terminal">
                                         {{ file_data.original_name.split('.')[-1].upper() }}
                                     </span>
                                 </div>
                                 <div class="mt-3 flex space-x-2">
                                     <a href="/f/{{ file_id }}"
                                        target="_blank"
-                                       class="flex-1 text-center bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded text-sm transition duration-300">
-                                        <i class="fas fa-eye mr-1"></i>View
+                                       class="flex-1 text-center bg-terminal-white text-terminal-black px-3 py-1.5 rounded-terminal text-sm transition duration-300">
+                                        View
                                     </a>
                                     <button onclick="copyToClipboard(window.location.origin + '/f/{{ file_id }}', this)"
-                                            class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1.5 rounded text-sm transition duration-300">
-                                        <i class="fas fa-copy mr-1"></i>Copy URL
+                                            class="bg-terminal-black text-terminal-white border border-terminal-white px-3 py-1.5 rounded-terminal text-sm transition duration-300 hover:bg-terminal-gray">
+                                        Copy URL
                                     </button>
                                 </div>
                             </div>
@@ -119,10 +138,10 @@
                     </div>
                 {% else %}
                     <div class="text-center py-8">
-                        <i class="fas fa-cloud-upload-alt text-4xl text-gray-300 mb-4"></i>
-                        <p class="text-gray-500">No files uploaded yet.</p>
+                        <div class="text-4xl text-terminal-gray mb-4">📁</div>
+                        <p class="text-terminal-gray">No files uploaded yet.</p>
                         {% if logged_in %}
-                            <p class="text-gray-500 text-sm mt-2">Use the upload form above to share your media.</p>
+                            <p class="text-terminal-gray text-sm mt-2">Use the upload form above to share your media.</p>
                         {% endif %}
                     </div>
                 {% endif %}
@@ -131,8 +150,8 @@
     </div>
     
     <!-- Footer -->
-    <footer class="bg-white border-t mt-12 py-6">
-        <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
+    <footer class="border-t border-terminal-white py-6 mt-12">
+        <div class="container mx-auto px-4 text-center text-terminal-gray text-sm">
             <p>© 2025 MediaHost. All rights reserved.</p>
         </div>
     </footer>
@@ -142,7 +161,7 @@
             navigator.clipboard.writeText(text).then(function() {
                 // Show a temporary success message
                 const originalText = element.innerHTML;
-                element.innerHTML = '<i class="fas fa-check mr-1"></i>Copied!';
+                element.innerHTML = 'Copied!';
                 setTimeout(function() {
                     element.innerHTML = originalText;
                 }, 2000);
